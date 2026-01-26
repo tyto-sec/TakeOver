@@ -1,0 +1,6 @@
+output/
+domains.txt
+build/
+HackerOneCsvGrabber.egg-info/
+*.pyc
+__pycache__/
