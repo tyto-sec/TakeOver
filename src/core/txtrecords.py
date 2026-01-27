@@ -1,5 +1,4 @@
 import os
-from utils.commands import run_cmd
 import logging
 import datetime as dt
 import re
@@ -8,7 +7,7 @@ import re
 def get_hosts_with_permissive_spf(dns_file, domain_output_dir):
     if not os.path.isfile(dns_file):
         logging.error(f"[{dt.datetime.now()}] DNS records file {dns_file} not found for SPF filtering.")
-        return ""
+        return
     logging.info(f"[{dt.datetime.now()}] Filtering SPF permissive candidates from DNS records in {dns_file}.")
     spf_hosts_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.spf_permissive_hosts.json")
     

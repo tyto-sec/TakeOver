@@ -29,3 +29,12 @@ def concatenate_files(file_paths, output_file=None):
             logging.error(f"Error saving file: {e}")
     
     return sorted_lines
+
+def convert_json_keys_to_txt(json_data, output_file):
+    try:
+        with open(output_file, 'w', encoding='utf-8') as f:
+            for key in json_data.keys():
+                f.write(f"{key}\n")
+        logging.info(f"JSON keys saved to {output_file}.")
+    except Exception as e:
+        logging.error(f"Error saving JSON keys to text file: {e}")
