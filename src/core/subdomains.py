@@ -13,7 +13,7 @@ def chaos_enum(domain, domain_output_dir):
 
 def subdomain_enum(cmd, tool_name, domain, domain_output_dir):
     logging.info(f"[{dt.datetime.now()}] Enumarating subdomains of {domain} with {tool_name}.")
-    output_file = os.path.join(domain_output_dir, f"{tool_name}.subdomains.txt")
+    output_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.{tool_name}.subdomains.txt")
     full_cmd = cmd.format(domain=domain) + " | anew"
     subs = run_cmd(full_cmd)
     if subs:

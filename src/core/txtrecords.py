@@ -10,7 +10,7 @@ def get_hosts_with_permissive_spf(dns_file, domain_output_dir):
         logging.error(f"[{dt.datetime.now()}] DNS records file {dns_file} not found for SPF filtering.")
         return ""
     logging.info(f"[{dt.datetime.now()}] Filtering SPF permissive candidates from DNS records in {dns_file}.")
-    spf_hosts_file = os.path.join(domain_output_dir, "spf_permissive_hosts.json")
+    spf_hosts_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.spf_permissive_hosts.json")
     
     permissive_hosts = search_for_permissive_spf_hosts(dns_file)
 
@@ -41,3 +41,4 @@ def search_for_permissive_spf_hosts(dns_file):
     except Exception as e:
         logging.error(f"[{dt.datetime.now()}] Error searching DNS file {dns_file} for SPF hosts: {e}")
     return permissive_hosts
+
