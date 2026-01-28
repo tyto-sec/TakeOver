@@ -1,8 +1,9 @@
 import os
-from dotenv import load_dotenv
-from telegram import Bot
 import logging
 import datetime as dt
+
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -18,8 +19,10 @@ def get_telegram_config():
 def send_telegram_message(message):
     try:
         bot_token, chat_id = get_telegram_config()
-        bot = Bot(token=bot_token)
-        bot.send_message(chat_id=chat_id, text=message)
+        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+        payload = {"chat_id": chat_id, "text": message}
+        response = requests.post(url, json=payload, timeout=10)
+        response.raise_for_status()
         logging.info("[+] Telegram message sent successfully")
         return True
     except ValueError as e:
