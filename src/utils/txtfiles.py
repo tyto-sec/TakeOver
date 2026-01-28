@@ -1,6 +1,10 @@
 import logging
 import datetime as dt
 
+def read_lines(file_path):
+    with open(file_path, "r") as f:
+        return [line.strip() for line in f.readlines() if line.strip()]
+
 def concatenate_files(file_paths, output_file=None):
     unique_lines = set()
     

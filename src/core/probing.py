@@ -9,7 +9,7 @@ def check_online_hosts(cname_hosts_pairs_file, domain_output_dir):
     if not os.path.isfile(cname_hosts_pairs_file):
         logging.error(f"[{dt.datetime.now()}] Grepped CNAME hosts file {cname_hosts_pairs_file} not found for online checking.")
         return
-    logging.info(f"[{dt.datetime.now()}] Checking online hosts...")
+    logging.info(f"[{dt.datetime.now()}] Checking online hosts from {cname_hosts_pairs_file}.")
     online_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.online_candidates.txt")
     
     grepped_cname_hosts_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.grepped_cname_hosts.txt")
