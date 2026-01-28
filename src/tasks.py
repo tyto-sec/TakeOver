@@ -11,7 +11,7 @@ from utils.txtfiles import concatenate_files
 from constants import CNAME_FINGERPRINTS, TAKEOVER_MAP
 
 NUCLEI_TEMPLATE_DIR = os.path.expanduser("~/nuclei-templates/http/takeovers")
-OUTPUT_DIR = "output"
+OUTPUT_DIR = "../output"
 
 def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, nuclei_template_dir):
     domain_name_safe = domain.replace('.', '_')
@@ -19,13 +19,18 @@ def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, 
     
     os.makedirs(domain_output_dir, exist_ok=True)
 
-    logging.info(f"[+] Processing domain: {domain}")
-    logging.info(f"[*] Output directory: {domain_output_dir}")
+    logging.info(f"[{dt.datetime.now()}] Processing domain: {domain}")
+    logging.info(f"[{dt.datetime.now()}] Output directory: {domain_output_dir}")
     
     try:
         subfinder_file = subfinder_enum(domain, domain_output_dir)
+        subfinder_file_abs = os.path.join(domain_output_dir, os.path.basename(subfinder_file))
+
         chaos_file = chaos_enum(domain, domain_output_dir)
-        subs_file = concatenate_files([subfinder_file, chaos_file], domain_output_dir, "combined_subdomains.txt")
+        chaos_file_abs = os.path.join(domain_output_dir, os.path.basename(chaos_file))
+
+        combined_subdomains_file = os.path.join(domain_output_dir, "combined_subdomains.txt")
+        subs_file = concatenate_files([subfinder_file_abs, chaos_file_abs], combined_subdomains_file)
 
         dns_file = dns_enum(subs_file, domain_output_dir)
         dns_file_abs = os.path.join(domain_output_dir, os.path.basename(dns_file))
@@ -35,13 +40,13 @@ def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, 
         cname_hosts_pairs_file = get_hosts_with_cname(dns_file_abs, domain_output_dir)
         cname_hosts_pairs_file_abs = os.path.join(domain_output_dir, os.path.basename(cname_hosts_pairs_file))
 
-        grepped_cname_hosts_pairs_file = grep_cname_hosts(cname_hosts_pairs_file_abs, domain_output_dir)
+        grepped_cname_hosts_pairs_file = grep_cname_hosts(cname_hosts_pairs_file_abs, domain_output_dir, cname_fingerprints)
         grepped_cname_hosts_pairs_file_abs = os.path.join(domain_output_dir, os.path.basename(grepped_cname_hosts_pairs_file))
 
         online_file = check_online_hosts(grepped_cname_hosts_pairs_file_abs, domain_output_dir)
         online_file_abs = os.path.join(domain_output_dir, os.path.basename(online_file))
         
-        run_nuclei_scan(online_file_abs, grepped_cname_hosts_pairs_file_abs, domain_output_dir, cname_fingerprints, takeover_map, nuclei_template_dir)
+        run_nuclei_scan(online_file_abs, grepped_cname_hosts_pairs_file_abs, domain_output_dir, cname_fingerprints, takeover_map, nuclei_template_dir, output_dir)
 
         logging.info(f"Domain {domain} scan completed successfully.")
         

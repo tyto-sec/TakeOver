@@ -1,5 +1,6 @@
 import logging
 import datetime as dt
+import json
 
 def read_lines(file_path):
     with open(file_path, "r") as f:
@@ -31,14 +32,19 @@ def concatenate_files(file_paths, output_file=None):
             logging.info(f"Files concatenated and saved to {output_file}.")
         except Exception as e:
             logging.error(f"Error saving file: {e}")
-    
+        return output_file
+
     return sorted_lines
 
-def convert_json_keys_to_txt(json_data, output_file):
+def convert_json_keys_to_txt(json_file_path, output_file):
     try:
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            json_data = json.load(f)
+        
         with open(output_file, 'w', encoding='utf-8') as f:
             for key in json_data.keys():
                 f.write(f"{key}\n")
         logging.info(f"JSON keys saved to {output_file}.")
     except Exception as e:
-        logging.error(f"Error saving JSON keys to text file: {e}")
+        logging.error(f"Error converting JSON to TXT: {e}")
+

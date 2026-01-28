@@ -8,7 +8,7 @@ def run_cmd(cmd):
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         return result.stdout.strip()
     except Exception as e:
-        logging.error(f"[{dt.datetime.now()}] Error executing: {cmd}\n{e}")
+        logging.error(f"Error executing: {cmd}\n{e}")
         return ""
 
 
@@ -29,6 +29,6 @@ def run_cmd_with_stdin(cmd, stdin_data=None):
         )
         return result.stdout.strip()
     except Exception as e:
-        logging.error(f"[{dt.datetime.now()}] Error executing: {cmd}\n{e}")
+        logging.error(f"Error executing: {cmd}\n{e}")
         return ""
 

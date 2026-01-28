@@ -23,11 +23,11 @@ def send_telegram_message(message):
         payload = {"chat_id": chat_id, "text": message}
         response = requests.post(url, json=payload, timeout=10)
         response.raise_for_status()
-        logging.info("[+] Telegram message sent successfully")
+        logging.info("Telegram message sent successfully")
         return True
     except ValueError as e:
-        logging.error(f"[{dt.datetime.now()}] {e}")
+        logging.error(f"{e}")
         return False
     except Exception as e:
-        logging.error(f"[{dt.datetime.now()}] Error sending Telegram message: {e}")
+        logging.error(f"Error sending Telegram message: {e}")
         return False

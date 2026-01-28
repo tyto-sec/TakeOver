@@ -6,3 +6,4 @@ HackerOneCsvGrabber.egg-info/
 __pycache__/
 .env
 venv/
+resume.cfg
