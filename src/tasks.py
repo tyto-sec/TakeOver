@@ -19,8 +19,8 @@ def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, 
     
     os.makedirs(domain_output_dir, exist_ok=True)
 
-    logging.info(f"[{dt.datetime.now()}] Processing domain: {domain}")
-    logging.info(f"[{dt.datetime.now()}] Output directory: {domain_output_dir}")
+    logging.info(f"Processing domain: {domain}")
+    logging.info(f"Output directory: {domain_output_dir}")
     
     try:
         subfinder_file = subfinder_enum(domain, domain_output_dir)
@@ -29,7 +29,7 @@ def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, 
         chaos_file = chaos_enum(domain, domain_output_dir)
         chaos_file_abs = os.path.join(domain_output_dir, os.path.basename(chaos_file))
 
-        combined_subdomains_file = os.path.join(domain_output_dir, "combined_subdomains.txt")
+        combined_subdomains_file = os.path.join(domain_output_dir, f"{dt.datetime.now().strftime('%Y%m%d')}.combined_subdomains.txt")
         subs_file = concatenate_files([subfinder_file_abs, chaos_file_abs], combined_subdomains_file)
 
         dns_file = dns_enum(subs_file, domain_output_dir)

@@ -63,14 +63,15 @@ def grep_cname_hosts(cname_hosts_pairs_file, domain_output_dir, cname_fingerprin
         
         for host, cname in host_cname_pairs.items():
             for keyword in unique_cname_keywords:
-                if keyword.lower() in cname.lower():
+                if re.search(keyword, cname, re.IGNORECASE):
                     grepped_hosts[host] = cname
+                    logging.debug(f"Match found: {host} -> {cname} (pattern: {keyword})")
                     break
         
         with open(grepped_cname_hosts_pairs_file, 'w') as f:
             json.dump(grepped_hosts, f, indent=4)
         
-        logging.info(f"Found {len(grepped_hosts)} vulnerable CNAME hosts.")
+        logging.info(f"Found {len(grepped_hosts)} interesting CNAME hosts.")
     except Exception as e:
         logging.error(f"Error processing CNAME file: {e}")
     

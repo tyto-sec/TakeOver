@@ -48,3 +48,24 @@ def convert_json_keys_to_txt(json_file_path, output_file):
     except Exception as e:
         logging.error(f"Error converting JSON to TXT: {e}")
 
+def add_protocol_to_hosts(input_file, output_file, protocol='https'):
+    try:
+        with open(input_file, 'r', encoding='utf-8') as f:
+            hosts_list = [line.strip() for line in f.readlines() if line.strip()]
+        
+        if not hosts_list:
+            logging.warning(f"No hosts found in {input_file}")
+            return 0
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            for host in hosts_list:
+                if not host.startswith('http://') and not host.startswith('https://'):
+                    f.write(f"{protocol}://{host}\n")
+                else:
+                    f.write(f"{host}\n")
+        
+        logging.info(f"Added {protocol}:// protocol to {len(hosts_list)} hosts, saved to {output_file}")
+        return len(hosts_list)
+    except Exception as e:
+        logging.error(f"Error adding protocol to hosts: {e}")
+        return None
