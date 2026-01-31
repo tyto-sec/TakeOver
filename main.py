@@ -22,6 +22,8 @@ def main():
 
     """
     print(banner)
+    import sys
+    sys.stdout.flush()
     
     parser = argparse.ArgumentParser(
         description="TakeOver Scanner: Automated subdomain takeover and permissive email configurations detection tool.",

@@ -1,0 +1,9 @@
+.git/
+output/
+venv/
+__pycache__/
+TakeOver.egg-info/
+.github/
+.pytest_cache/
+build/
+tests/

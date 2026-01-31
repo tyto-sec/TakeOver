@@ -8,3 +8,4 @@ __pycache__/
 venv/
 resume.cfg
 TakeOver.egg-info/
+build.log
