@@ -1,12 +1,12 @@
-from utils.commands import run_cmd
 import os
 import logging
 import datetime as dt
-from dotenv import load_dotenv
-from utils.transformations import clean_domain
+from dotenv import load_dotenv, find_dotenv
 
-# Carregar variáveis do .env
-load_dotenv()
+from src.utils.commands import run_cmd
+from src.utils.transformations import clean_domain
+
+load_dotenv(find_dotenv(usecwd=True))
 
 def subfinder_enum(domain, domain_output_dir):
     cmd = "subfinder -d {domain} -silent"

@@ -2,7 +2,7 @@ import os
 import re
 import logging
 import datetime as dt
-from utils.commands import run_cmd
+from src.utils.commands import run_cmd
 import json
 
 def get_hosts_with_cname(dns_file, domain_output_dir):

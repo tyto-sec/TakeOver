@@ -1,10 +1,12 @@
 import os
-from utils.commands import run_cmd
 import logging
 import datetime as dt
 import json
 import re
-from utils.txtfiles import (
+
+from src.utils.commands import run_cmd
+
+from src.utils.txtfiles import (
     convert_json_keys_to_txt,
     add_protocol_to_hosts
 )

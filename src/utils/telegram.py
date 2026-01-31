@@ -3,9 +3,9 @@ import logging
 import datetime as dt
 
 import requests
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
-load_dotenv()
+load_dotenv(find_dotenv(usecwd=True))
 
 def get_telegram_config():
     bot_token = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -20,7 +20,8 @@ def send_telegram_message(message):
     try:
         bot_token, chat_id = get_telegram_config()
         url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        payload = {"chat_id": chat_id, "text": message}
+        prefix = f"[{dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] TakeOver Alert:\n"
+        payload = {"chat_id": chat_id, "text": prefix + message}
         response = requests.post(url, json=payload, timeout=10)
         response.raise_for_status()
         logging.info("Telegram message sent successfully")

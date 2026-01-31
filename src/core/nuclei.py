@@ -1,12 +1,13 @@
 import os
 import re
 import csv
-from utils.commands import run_cmd
 import json
 import datetime as dt
 import logging
-from utils.txtfiles import read_lines
-from utils.telegram import send_telegram_message
+
+from src.utils.commands import run_cmd
+from src.utils.txtfiles import read_lines
+from src.utils.telegram import send_telegram_message
 
 def run_nuclei_scan(online_hosts_file, cname_hosts_pairs_file, domain_output_dir, cname_fingerprints, takeover_map, nuclei_template_dir, output_dir):
     if not os.path.isfile(online_hosts_file):

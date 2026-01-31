@@ -1,14 +1,20 @@
 import os
-from core.subdomains import subfinder_enum, chaos_enum
-from core.dns import dns_enum
-from core.txtrecords import get_hosts_with_permissive_spf
-from core.cnamerecords import get_hosts_with_cname, grep_cname_hosts
-from core.probing import check_online_hosts
-from core.nuclei import run_nuclei_scan
 import logging
 import datetime as dt
-from utils.txtfiles import concatenate_files
-from constants import CNAME_FINGERPRINTS, TAKEOVER_MAP
+import concurrent.futures
+
+from src.core.subdomains import subfinder_enum, chaos_enum
+from src.core.dns import dns_enum
+from src.core.txtrecords import get_hosts_with_permissive_spf
+from src.core.cnamerecords import get_hosts_with_cname, grep_cname_hosts
+from src.core.probing import check_online_hosts
+from src.core.nuclei import run_nuclei_scan
+from src.constants import CNAME_FINGERPRINTS, TAKEOVER_MAP
+
+from src.utils.txtfiles import (
+    concatenate_files,
+    read_lines
+)
 
 NUCLEI_TEMPLATE_DIR = os.path.expanduser("~/nuclei-templates/http/takeovers")
 OUTPUT_DIR = "../output"
@@ -55,5 +61,27 @@ def process_single_domain(domain, output_dir, cname_fingerprints, takeover_map, 
     
 
 
-def run():
-    process_single_domain("unimelb.edu.au", OUTPUT_DIR, CNAME_FINGERPRINTS, TAKEOVER_MAP, NUCLEI_TEMPLATE_DIR)
+def run(domains_file, output_dir=OUTPUT_DIR, cname_fingerprints=CNAME_FINGERPRINTS, takeover_map=TAKEOVER_MAP, nuclei_template_dir=NUCLEI_TEMPLATE_DIR, max_threads=8):
+    logging.info("Starting automated TakeOver scanner...")
+
+    os.makedirs(output_dir, exist_ok=True)
+
+    domains_list = read_lines(domains_file)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_threads) as executor:
+        logging.info(f"Processing {len(domains_list)} domain with {max_threads} parallel threads.")
+
+        futures = [
+            executor.submit(
+                process_single_domain,
+                domain_item,
+                output_dir,
+                cname_fingerprints,
+                takeover_map,
+                nuclei_template_dir,
+            )
+            for domain_item in domains_list
+        ]
+        for future in concurrent.futures.as_completed(futures):
+            future.result()
+
+    logging.info("Process completed. Check the output directory for results.")
