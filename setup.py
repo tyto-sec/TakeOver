@@ -11,10 +11,11 @@ setup(
     long_description="TakeOver Scanner: Automated tool for discovering subdomain takeover vulnerabilities and permissive SPF records through comprehensive DNS enumeration and analysis.",
     packages=find_packages(include=["src", "src.*"]),
     package_dir={"": "."},
+    py_modules=["main"],
     install_requires=requirements,
     entry_points={
         "console_scripts": [
-            "TakeOver=src.main:main",
+            "TakeOver=main:main",
         ],
     },
     python_requires=">=3.7",
