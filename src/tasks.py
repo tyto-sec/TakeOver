@@ -10,6 +10,7 @@ from src.core.cnamerecords import get_hosts_with_cname, grep_cname_hosts
 from src.core.probing import check_online_hosts
 from src.core.nuclei import run_nuclei_scan
 from src.constants import CNAME_FINGERPRINTS, TAKEOVER_MAP
+from src.utils.telegram import send_telegram_message
 
 from src.utils.txtfiles import (
     concatenate_files,
@@ -85,3 +86,4 @@ def run(domains_file, output_dir=OUTPUT_DIR, cname_fingerprints=CNAME_FINGERPRIN
             future.result()
 
     logging.info("Process completed. Check the output directory for results.")
+    send_telegram_message(f"Scan completed. Check the output directory {output_dir} for results.")

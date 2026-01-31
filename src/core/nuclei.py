@@ -49,19 +49,22 @@ def run_nuclei_scan(online_hosts_file, cname_hosts_pairs_file, domain_output_dir
         
         if nuclei_template:
             template_path = os.path.join(nuclei_template_dir, nuclei_template) 
-            cmd = f"nuclei -u {host} -t {template_path}"
+            cmd = f"nuclei -u {host} -t {template_path} -silent -jsonl"
             logging.info(f"Testing {host} against {provider_name} template: {nuclei_template}")
             try:
                 result = run_cmd(cmd)
                 vulnerable = "NOT Vulnerable"
+
                 if result:
                     vulnerable = f"VULNERABLE ({provider_name})"
-                    output_path = os.path.join(output_dir, f"{host.split(':')[0]}_vulnerable_{provider_name}.txt")
+                    output_path = os.path.join(output_dir, f"{host.split(':')[0]}_vulnerable_{provider_name}.jsonl")
 
-                    send_telegram_message(f"VULNERABLE! {host} is vulnerable to {provider_name} takeover. Details saved in: {output_path}")
+                    send_telegram_message(f"VULNERABLE: {host} is vulnerable to {provider_name} takeover.")
+                    send_telegram_message(result)
 
-                    with open(output_path, "w") as f:
-                        f.write(result)
+                    with open(output_path, "w") as out_f:
+                        out_f.write(result)
+
                     logging.info(f"VULNERABLE! Result saved in: {output_path}")
                 results.append([host, cname_target, provider_name, template_path, vulnerable])
 
